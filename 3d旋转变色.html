@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>3d旋转动画</title>
+    <style>
+      .demo{perspective:1000px;transform-style: preserve-3d;position: absolute;width: 400px;height: 400px;top: 100px;left:300px;}
+      .box{width: 100%;height: 100%;transform-style: preserve-3d;animation: roate 4s linear 14s forwards;animation-iteration-count: infinite;} 
+      .box div{position: absolute;width:100%;height: 100%;border: 1px solid black;line-height: 400px;text-align: center;background:rgba(0,0,0,0);transition:1s linear;}
+      .box #topl{animation:topanima 2s linear 2s forwards;}
+      .box #leftl{animation:leftanima 2s linear 4s forwards;}
+      .box #rightl{animation:rightanima 2s linear 6s forwards;}
+      .box #bottoml{animation:bottomanima 2s linear 8s forwards;}
+      .box #frontl{animation:frontanima 2s linear 10s forwards;}
+      .box #backl{animation:backanima 2s linear 12s forwards;}
+      .demo:hover .box>div{border-color:rgba(0,0,0,0);color:#fff;}
+      .demo:hover .box #top{background:rgba(255,255,0,0.8);}
+      .demo:hover .box #bottoml{background:rgba(0,255,0,0.8);}
+      .demo:hover .box #leftl{background:rgba(0,255,255,0.8);}
+      .demo:hover .box #rightl{background:rgba(0,0,255,0.8);}
+      .demo:hover .box #frontl{background:rgba(255,0,255,0.8);}
+      .demo:hover .box #backl{background:rgba(255,0,0,0.8);}
+      @keyframes topanima{
+        100%{transform:rotate3d(1,0,0,90deg) translateZ(200px);}
+      }
+      @keyframes leftanima{
+           100%{transform:rotate3d(0,1,0,-90deg) translateZ(200px)}
+      }
+       @keyframes rightanima{
+        100%{transform:rotate3d(0,1,0,90deg) translateZ(200px)}
+      }
+       @keyframes bottomanima{
+         100%{transform:rotate3d(1,0,0,-90deg) translateZ(200px);}
+      }
+       @keyframes backanima{
+         100%{transform:rotate3d(0,1,0,180deg) translateZ(200px);}
+      }
+       @keyframes frontanima{
+         100%{transform:translateZ(200px);}
+      }
+       @keyframes roate{
+        50%{transform:rotate3d(1,1,1,180deg);}
+        100%{transform:rotate3d(1,1,1,360deg);}
+       }
+    /* .box #top{transform:rotate3d(1,0,0,90deg) translateZ(100px);}*/
+    /* .box #left{transform:rotate3d(0,1,0,-90deg) translateZ(100px)}
+     .box #right{transform:rotate3d(0,1,0,90deg) translateZ(100px)}
+     .box #bottom{transform:rotate3d(1,0,0,-90deg) translateZ(100px);}
+     .box #back{transform:translateZ(-100px);}
+     .box #front{transform:translateZ(100px);}*/
+     </style>
+</head>
+<body>
+<div class="demo">
+<div class="box">
+    <div id="topl">top</div>
+    <div id="leftl">left</div>
+    <div id="rightl">right</div>
+    <div id=bottoml>botoom</div>
+    <div id="frontl">front</div>
+    <div id="backl">back</div>
+</div>
+</div>
+</body>
+</html>

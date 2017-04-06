@@ -1,0 +1,292 @@
+一 绘制路径图形
+
+了解canvas之前,首先需要了解'栅格(canvasgrid)'和坐标空间的概念
+1 canvas元素默认被网格所覆盖,通常网格的一个单元相当于canvas元素中的一像素
+2 栅格的起点为左上角(坐标为(0,0)),而其他元素的位置则是相对于原点定位,以canvas中的某一个点为例,则是该点的坐标为(x,y)
+
+canvas只支持一种原生的图形绘制,那就是矩形,至于其他图形都需要生成一条路径,而路径生成的方法让复杂图形的绘制成了可能
+
+canvas提供了三种绘制矩形的方法
+fillRect(x,y,width,height)  绘制一个填充的矩形
+strokeRect(x,y,width,height) 绘制一个矩形边框
+clearRect(x,y,width,height) 清除指定矩形区域,让清除部分完全透明
+这里的xy为相对于坐标原点的坐标,而后两个参数则是矩形的尺寸
+
+在canvas中,图形的基本元素是路径,所谓的路径是通过不同颜色和宽度的线段或曲线相连形成的不同形状的点的集合,一个路径,一个子路径都应该是闭合的
+使用路径绘制图形需要一些额外的步骤
+1 创建路径起始点(起点)
+2 使用'画图命令'去画出路径
+3 封闭该路径
+4 当路径生成时,通过描边或填充路径区域来渲染图形
+
+相应的函数
+1 beginPath() 新建一条路径,生成后,图形绘制命令将被指定到路径生成路径
+2 closePath() 闭合路径后图形绘制命令重新指向到上下文中
+3 stroke() 通过线条来绘制图形轮廓
+4 fill() 通过填充生成实心图形
+
+生成路径的第一步叫做beginPath()。本质上，路径是由很多子路径构成，这些子路径都是在一个列表中，所有的子路径（线、弧形、等等）构成图形。而每次这个方法调用之后，列表清空重置，然后我们就可以重新绘制新的图形
+
+ 注意：当前路径为空，即调用beginPath()之后，或者canvas刚建的时候，第一条路径构造命令通常被视为是moveTo（），无论最后的是什么。出于这个原因，你几乎总是要在设置路径之后专门指定你的起始位置。
+
+第二步就是调用函数指定绘制路径
+
+第三，就是闭合路径closePath(),不是必需的。这个方法会通过绘制一条从当前点到开始点的直线来闭合图形。如果图形是已经闭合了的，即当前点为开始点，该函数什么也不做。
+
+注意：当你调用fill()函数时，所有没有闭合的形状都会自动闭合，所以你不需要调用closePath()函数。但是调用stroke()时不会自动闭合。
+
+//利用路径绘制一个三角形
+			ctx.beginPath();
+			ctx.moveTo(25,50);//设置原点为(25,50)
+			ctx.lineTo(100,75);
+			ctx.lineTo(100,25);//绘制直线路径
+			ctx.lineTo(25,15);
+			ctx.lineTo(25,50);
+			ctx.stroke();//用线条绘制图形
+
+一些函数
+1 moveTo(x,y) 移动笔触到(x,y)位置
+2 lineTo(x,y) 绘制一条从当前位置到(x,y)位置的直线
+3 arc(x, y, radius, startAngle, endAngle, anticlockwise) 画一个以（x,y）为圆心的以radius为半径的圆弧（圆），从startAngle开始到endAngle结束，按照anticlockwise给定的方向（默认为顺时针）来生成。
+4 arcTo(x1, y1, x2, y2, radius) 根据给定的控制点和半径画一段圆弧，再以直线连接两个控制点。
+
+该方法有五个参数：x,y为绘制圆弧所在圆上的圆心坐标。radius为半径。startAngle以及endAngle参数用弧度定义了开始以及结束的弧度。这些都是以x轴为基准。参数anticlockwise 为一个布尔值。为true时，是逆时针方向，否则顺时针方向。
+
+注意：arc()函数中的角度单位是弧度，不是度数。角度与弧度的js表达式:radians=(Math.PI/180)*degrees
+
+贝塞尔（bezier）以及二次贝塞尔
+
+语法:
+quadraticCurveTo(cp1x, cp1y, x, y)
+    绘制二次贝塞尔曲线，x,y为结束点，cp1x,cp1y为控制点。
+bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+    绘制三次贝塞尔曲线，x,y为结束点，cp1x,cp1y为控制点一，cp2x,cp2y为控制点二。 
+
+//贝塞尔曲线绘制心形
+ctx.beginPath();
+ctx.moveTo(75,40);
+ctx.bezierCurveTo(75,37,70,25,50,25);
+ctx.bezierCurveTo(20,25,20,62.5,20,62.5);
+ctx.bezierCurveTo(20,80,40,102,75,120);
+ctx.bezierCurveTo(110,102,130,80,130,62.5);
+ctx.bezierCurveTo(130,62.5,130,25,100,25);
+ctx.bezierCurveTo(85,25,75,37,75,40);
+ctx.fill();
+
+矩形
+
+语法:
+rect(x, y, width, height)
+    绘制一个左上角坐标为（x,y），宽高为width以及height的矩形。 
+
+Path2D 对象
+
+Path2D()
+    Path2D()会返回一个新初始化的Path2D对象（可能将某一个路径作为变量——创建一个它的副本，或者将一个包含SVG path数据的字符串作为变量）。
+
+new Path2D();     // 空的Path对象
+new Path2D(path); // 克隆Path对象
+new Path2D(d);    // 从SVG建立Path对象
+
+
+二 给绘制的图形进行样式填充
+
+1 色彩 Colors
+给图形上色有两个属性,fillStyle和strokeStyle
+
+语法:
+fillStyle=color 设置图形的填充颜色
+strokeStyle=color 设置图形的轮廓颜色
+//默认为黑色#000000
+
+需要注意的是,必须是先设定样式再进行绘制图形
+!!!在使用color功能的时候一定要将图形绘制出来!!!
+
+2 透明度 Transparency
+
+语法:
+globalAlpha = transparencyValue
+    这个属性影响到 canvas 里所有图形的透明度，有效的值范围是 0.0 （完全透明）到 1.0（完全不透明），默认是 1.0。 
+
+因为 strokeStyle 和 fillStyle 属性接受符合 CSS 3 规范的颜色值，那我们可以用下面的写法来设置具有透明度的颜色。
+
+// 指定透明颜色，用于描边和填充样式
+ctx.strokeStyle = "rgba(255,0,0,0.5)";
+ctx.fillStyle = "rgba(255,0,0,0.5)";
+
+rgba() 方法与 rgb() 方法类似，就多了一个用于设置色彩透明度的参数。它的有效范围是从 0.0（完全透明）到 1.0（完全不透明）。
+
+3 线型 Line styles
+用于设置线的样式
+
+语法:
+lineWidth = value    设置线条宽度。
+lineCap = type    设置线条末端样式。
+属性 lineCap 的值决定了线段端点显示的样子。它可以为下面的三种的其中之一：butt等长，round圆形 和 square超出为一个矩形。默认是 butt。
+lineJoin = type    设定线条与线条间接合处的样式。
+lineJoin 的属性值决定了图形中两线段连接处所显示的样子。它可以是这三种之一：round平滑, bevel 和 miter。默认是 miter。
+miterLimit = value    限制当两条线相交时交接处最大长度；所谓交接处长度（斜接长度）是指线条交接处内角顶点到外角顶点的长度。
+getLineDash()    返回一个包含当前虚线样式，长度为非负偶数的数组。
+setLineDash(segments)    设置当前虚线样式。
+lineDashOffset = value    设置虚线样式的起始偏移量。 
+
+4 渐变 Gradients
+使用线性或径向渐变来填充或描边
+使用该方法需要先新建一个canvasGradient对象,并赋给图形的fillStyle或strokeStyle对象
+
+语法:
+createLinearGradient(x1, y1, x2, y2)
+    createLinearGradient 方法接受 4 个参数，表示渐变的起点 (x1,y1) 与终点 (x2,y2)。
+createRadialGradient(x1, y1, r1, x2, y2, r2)
+    createRadialGradient 方法接受 6 个参数，前三个定义一个以 (x1,y1) 为原点，半径为 r1 的圆，后三个参数则定义另一个以 (x2,y2) 为原点，半径为 r2 的圆。 
+
+如:var lineargradient = ctx.createLinearGradient(0,0,150,150);
+var radialgradient = ctx.createRadialGradient(75,75,0,75,75,100);
+
+在创建canvasGradient对象后,使用addColorStop方法进行上色
+gradient.addColorStop(position, color)
+    addColorStop 方法接受 2 个参数，position 参数必须是一个 0.0 与 1.0 之间的数值，表示渐变中颜色所在的相对位置。例如，0.5 表示颜色会出现在正中间。color 参数必须是一个有效的 CSS 颜色值（如 #FFF， rgba(0,0,0,1)，等等）。 
+
+这是一个简单的线性黑白渐变例子
+var lineargradient = ctx.createLinearGradient(0,0,150,150);
+lineargradient.addColorStop(0,'white');
+lineargradient.addColorStop(1,'black');
+
+5 图案样式 Patterns
+
+语法:
+createPattern(image, type)
+    该方法接受两个参数。Image 可以是一个 Image 对象的引用，或者另一个 canvas 对象。Type 必须是下面的字符串值之一：repeat，repeat-x，repeat-y 和 no-repeat。 
+
+三 绘制文本
+
+canvas提供了两种方法来渲染文本
+语法
+fillText(text,x,y[,maxWidth])
+在指定的(x,y)位置填充指定的文本，绘制的最大宽度是可选的.
+strokeText(text, x, y [, maxWidth])
+    在指定的(x,y)位置绘制文本边框，绘制的最大宽度是可选的.
+
+//填充文本实例
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+  ctx.font = "48px serif";
+  ctx.fillText("Hello world", 10, 50);
+}
+//文本边框实例
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+  ctx.font = "48px serif";
+  ctx.strokeText("Hello world", 10, 50);
+}
+
+2 文本的样式
+语法:
+font = value
+    当前我们用来绘制文本的样式. 这个字符串使用和 CSS font 属性相同的语法. 默认的字体是 10px sans-serif。
+textAlign = value
+    文本对齐选项. 可选的值包括：start, end, left, right or center. 默认值是 start。
+textBaseline = value
+    基线对齐选项. 可选的值包括：top, hanging, middle, alphabetic, ideographic, bottom。默认值是 alphabetic。
+direction = value
+    文本方向。可能的值包括：ltr, rtl, inherit。默认值是 inherit。 
+
+
+measureText()
+    将返回一个 TextMetrics对象的宽度、所在像素，这些体现文本特性的属性。 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,72 @@
+
+1 首先构建出一个基本的html框架
+-基本组成
+1)wrap:最外层包裹层
+2)slider:轮播图包裹层
+3)img:具体的轮播图片
+4)buttons:按钮包裹层
+5)还有两个arrows按钮,用于前进后退
+
+2 其次设置样式
+-其中给wrap层添加一个overflow:hidden和用于排版的position:relate
+-img设置float:left
+-将buttons和arrows排列好
+
+3 设置js逻辑
+-取得所有元素
+1)buttons arrows按钮,实现onclick,改变style.left从而改变偏移量达到改变
+2)主要是animate函数的实现
+    function animate(offset){
+            animated=true;
+            var newLeft=parseInt(slider.style.left)+offset;
+            var time=300;//位移总时间
+            var interval=10;//位移间隔
+            var speed=offset/(time/interval);//每次位移量 
+            
+            function go(){
+              if((speed<0&&parseInt(slider.style.left)>newLeft)||(speed>0&&parseInt(slider.style.left)<newLeft)){
+              slider.style.left=parseInt(slider.style.left)+speed+'px';
+              setTimeout(go,interval);
+              }
+              else{
+                animated=false;
+                slider.style.left=newLeft+'px';
+          
+                if(newLeft>-600){
+                slider.style.left=-3000+'px';
+                }
+                if(newLeft<-3000){
+                slider.style.left=-600+'px';
+                }
+              }
+            }
+            go();
+            //slider.style.left=parseInt(offset)+parseInt(slider.style.left)+'px';
+          }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

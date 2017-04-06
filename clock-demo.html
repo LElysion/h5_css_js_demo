@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clock</title>
+    <style>
+    *{margin:0;padding: 0}
+    	#clock{
+    		width: 602px;
+    		height: 602px;
+    		border: 1px solid red;
+    		border-radius: 50%;
+    		text-align: center;
+    		line-height: 600px;
+    		position: relative;
+    	}
+    	#time{
+    		width: 1px;
+    		height: 300px;
+    		position: fixed;
+    		top: 0px;
+    		left: 300px;
+    		background-color: red;
+    		transform-origin:0 100%;
+    		animation:myClock 60s linear infinite;
+    	}
+    	#dateTime{
+    		position: absolute;
+    		top: 0px;
+    		left: 100px;
+    	}
+    	#clock:hover #time{
+    		
+    	}
+    	@keyframes myClock{
+    		0%{transform:rotate(0deg);}
+    		100%{transform:rotate(360deg);}
+    	}
+    </style>
+    <script>
+    function clockChange(){
+    	var d=new Date();
+    	console.log(d);
+    	var clock=document.getElementById('dateTime');
+    	clock.innerText=d;
+    	setTimeout("clockChange()",1000);
+    }
+    window.onload=function(){
+    clockChange();
+    }
+    </script>
+  </head>
+  <body>
+    <div id="clock">
+    	<div id="dateTime">clock</div>
+    	<div id="time"></div>
+    </div>
+  </body>
+</html>

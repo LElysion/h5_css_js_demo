@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script>
+window.onload=function(){
+	showTime();
+}
+	function showTime(){
+		var curtime=new Date();
+	var endtime=new Date("2016/5/6,12:20:12");
+	var lefttime=parseInt((endtime.getTime()-curtime.getTime())/1000);
+	var d=parseInt(lefttime/(24*60*60));
+	var h=parseInt(lefttime/(60*60)%24);
+	var m=parseInt(lefttime/60%60);
+	var s=parseInt(lefttime%60);
+	document.getElementById('lefttime').innerHTML=d+'天'+h+'小时'+m+'分钟'+s+'秒';
+	if(lefttime<=0){
+		document.getElementById('lefttime').innerHTML='团购结束';
+		}
+	setTimeout(showTime,500);
+		}
+
+</script>
+</head>
+
+<body>
+<div>
+	<span id="lefttime"></span>
+</div>
+</body>
+</html>

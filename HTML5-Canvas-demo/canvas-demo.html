@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas-demo</title>
+	<script type="text/javascript">
+	function draw(){
+		var canvas=document.getElementById('canvas');
+		var ctx=canvas.getContext('2d');
+		var imageObj=new Image();
+
+		imageObj.onload=function(){
+			ctx.drawImage(imageObj,0,0);
+		};
+		imageObj.src='img/001.jpg';
+	}
+	window.onload=function(){
+		draw();
+	}
+	</script>
+</head>
+<body>
+	<h3 style="text-align:center">关于canvas的demo</h3>
+	<canvas id="canvas" width="800" height="800"></canvas>
+	
+	<script>
+	//绘制矩形的方法
+			//ctx.fillRect(25,25,150,100);
+			//ctx.strokeRect(25,25,50,50);
+			//ctx.clearRect(35,35,50,50);
+
+			//利用路径绘制一个三角形
+			// ctx.strokeStyle = "rgba(255,0,0,1)";
+			 //ctx.fillStyle = "rgba(255,0,0,0.5)";
+
+			 //ctx.beginPath();
+
+			// ctx.moveTo(25,50);//移动为(25,50)
+			// ctx.lineTo(100,75);
+			// ctx.lineTo(150,25);//绘制直线路径
+			// ctx.lineTo(25,15);
+			// ctx.lineTo(45,105);
+			// ctx.lineTo(25,150);
+			// ctx.fill();//用线条绘制图形
+			// ctx.stroke();
+
+			//使用arc绘制笑脸
+
+			// ctx.beginPath();
+			// ctx.arc(75,75,50,0,Math.PI*2,true); // 绘制
+			// ctx.moveTo(110,75);
+			// ctx.arc(75,75,35,0,Math.PI,false);   // 口(顺时针)
+			// ctx.moveTo(65,65);
+			// ctx.arc(60,65,5,0,Math.PI*2,true);  // 左眼
+			// ctx.moveTo(95,65);
+			// ctx.arc(90,65,5,0,Math.PI*2,true);  // 右眼
+			// ctx.stroke();
+
+			//绘制一个调色板
+			// for (var i=0;i<6;i++){
+   //  			for (var j=0;j<6;j++){
+   //    				ctx.fillStyle = 'rgb(' + Math.floor(255-42.5*i) + ',' + 
+   //                     Math.floor(255-42.5*j) + ','+Math.floor(255-42.5*j);
+   //    			ctx.fillRect(j*25,i*25,25,25);
+   //  			}
+  	// 		}
+  	// 		for (var i=0;i<6;i++){
+   //    			for (var j=0;j<6;j++){
+   //      			ctx.strokeStyle = 'rgb(0,' + Math.floor(255-42.5*i) + ',' + 
+   //                       Math.floor(255-42.5*j) + ')';
+   //      			ctx.beginPath();
+   //      			ctx.arc(12.5+j*25,12.5+i*25,10,0,Math.PI*2,true);
+   //      			ctx.stroke();
+   //    			}
+   //  		}
+
+   //  		// 画背景
+		 //    ctx.fillStyle = '#FD0';
+			// ctx.fillRect(0,0,75,75);
+			// ctx.fillStyle = '#6C0';
+			// ctx.fillRect(75,0,75,75);
+			// ctx.fillStyle = '#09F';
+			// ctx.fillRect(0,75,75,75);
+			// ctx.fillStyle = '#F30';
+			// ctx.fillRect(75,75,75,75);
+			// ctx.fillStyle = '#FFF';
+
+			//   // 设置透明度值
+			// ctx.globalAlpha = 0.2;
+
+			// // 画半透明圆
+			// for (var i=0;i<7;i++){
+			// 	ctx.beginPath();
+			// 	ctx.arc(75,75,10+10*i,0,Math.PI*2,true);
+			// 	ctx.fill();
+			//  }
+
+			  // Create gradients
+			  // var lingrad = ctx.createLinearGradient(0,0,0,150);
+			  // lingrad.addColorStop(0, '#00ABEB');
+			  // lingrad.addColorStop(0.5, '#fff');
+			  // //lingrad.addColorStop(0.5, '#26C000');
+			  // //lingrad.addColorStop(1, '#fff');
+
+			  // var lingrad2 = ctx.createLinearGradient(0,50,0,95);
+			  // lingrad2.addColorStop(0.5, '#000');
+			  // lingrad2.addColorStop(1, 'rgba(0,0,0,0)');
+
+			  // // assign gradients to fill and stroke styles
+			  // ctx.fillStyle = lingrad;
+			  // ctx.strokeStyle = lingrad2;
+			  
+			  // // draw shapes
+			  // ctx.fillRect(10,10,130,130);
+			  // ctx.strokeRect(50,50,50,50);
+			  
+			  // ctx.font = "48px serif";
+			  // ctx.strokeStyle = "#CCF";
+			  // ctx.fillStyle="#CCC";
+  			//   ctx.fillText("Hello world", 10, 50);
+  			//   //ctx.textBaseline = "hanging";
+  			//   ctx.strokeText("Hello world", 10, 50);
+	</script>
+</body>
+</html>

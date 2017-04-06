@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Slider-demo-simple</title>
+    <style>
+      *{margin: 0;padding: 0;text-decoration: none;}
+      body{
+        padding: 20px;    
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      #wrap{
+        margin: 10px auto;
+        width: 600px;
+        height: 400px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #slider{
+        width: 4200px;
+        height: 400px;
+        position: absolute;
+        z-index: 1;
+      }
+      #slider img{
+        float: left;
+        max-width: 600px;
+        min-width:600px;
+        height: 100%;
+      }
+
+      #buttons{
+        position: absolute;
+        width: 100px;
+        height: 25px;
+        z-index: 2;
+        right: 20px;
+        bottom: 20px;
+      }
+      #buttons span{
+        cursor: pointer;
+        text-align: center;
+        border-radius: 50%;
+        line-height: 20px;
+        float: left;
+        width: 20px;
+        height: 20px;
+        display: block;
+        color: white;
+        background: rgba(0,0,0,.5);
+      }
+      #buttons span:hover{
+        background: rgba(0,0,0,.3);
+      }
+
+      #next{
+        right: 5px;
+      }
+      #prev{
+        left: 5px;
+      }
+      .arrow{
+        text-align: center;
+        line-height: 45px;
+        height: 50px;
+        width: 30px;
+        position: absolute;
+        top: 150px;
+        color: white;
+        font-size: 30px;
+        background: rgba(0,0,0,.3);
+        z-index: 3;
+        display: none;
+        /*border-radius: 12px;*/
+      }
+      .arrow:hover{
+        background: rgba(0,0,0,.7);
+      }
+      #wrap:hover .arrow{
+        display: block;
+      }
+      #buttons .on{
+        background: rgba(0,0,0,1);
+      }
+      #buttons .on:hover{
+        background: rgba(0,0,0,.7);
+      }
+    </style>
+    <script type="text/javascript">
+    window.onload=function(){
+          //alert('ok');
+          var wrap=document.getElementById('wrap');
+          var slider=document.getElementById('slider');
+          var buttons=document.getElementById('buttons').getElementsByTagName('span');
+          var next=document.getElementById('next');
+          var prev=document.getElementById('prev');
+          var index=1;
+          var animated=false;
+          var timer;
+
+          function animate(offset){//传入一个偏移量offset
+            animated=true;//当调用animate函数时将其设置为正在调用中,不允许再次调用
+            var newLeft=parseInt(slider.style.left)+offset;
+            //设置新的偏移量=原本的偏移量+传入的offset
+            var time=300;//位移总时间
+            var interval=10;//位移间隔
+            var speed=offset/(time/interval);//每次位移量 
+            
+            function go(){//定义动画函数go()
+              if((speed<0&&parseInt(slider.style.left)>newLeft)||(speed>0&&parseInt(slider.style.left)<newLeft)){
+                //进行一个判断,如果每次位移量小于0时当前偏移量大于新偏移量
+                            //或如果每次位移量大于0时当前偏移量小于新偏移量
+                            //这里主要是用于是否满足可以进行位移
+              slider.style.left=parseInt(slider.style.left)+speed+'px';
+              //满足条件后进行位移,每次只位移一次每次位移量,并嵌套setTimeout函数以达到动画效果
+              setTimeout(go,interval);
+              }
+              else{
+                animated=false;
+                slider.style.left=newLeft+'px';
+                //当以上条件不满足时,将animate停止(false),并将newLeft赋值
+                //下面两个是用于无缝轮播
+                //通过添加多两个头尾图片而达到无缝轮播
+                if(newLeft>-600){
+                slider.style.left=-3000+'px';
+                /*当图片从第一张到最后一张(第一张状态下点击后退)的时候,动画会偏移到0,而这时显示的为放在第一张图片前的最后一张图片,在动画完成的同时将偏移设置到最后一张中
+                下面同理
+                */
+                }
+                if(newLeft<-3000){
+                slider.style.left=-600+'px';
+                }
+              }
+            }
+            go();
+            //slider.style.left=parseInt(offset)+parseInt(slider.style.left)+'px';
+          }
+          next.onclick=function(){
+            if (animated) {
+                            return;
+                        }//防止动画执行中再次执行动画
+            if(parseInt(slider.style.left)<-2400){
+              slider.style.left=0+'px';//无缝轮播,当从最后一张偏移到第一张的时候进行赋值到第一张
+            }
+            /*
+            因为是先判断再进行动画,也就是说当图片从第四张偏移到第五张的时候,并不会触发这个判断,因为此时的当前偏移量应该为-2400,并不满足<-2400,而当位移到第五张的时候,当前偏移量已经达到了-3000,自然小于-2400,所以触发该条件并将其偏移量设置到-1张位置中,这时候已经不是最后一张中,而是用于无缝轮播的首张中,这时候是无法发现差别的,这时候进行动画的是-1张,此时偏移后自然也就是第一张图片了
+            */
+            animate(-600);//进行动画
+            
+            if(index==5){
+              index=1;
+            }else{
+              index+=1;
+            }
+            
+            showButton();
+            
+          }
+          prev.onclick=function(){
+            if (animated) {
+                            return;
+                        }
+            if(parseInt(slider.style.left)>-1200){
+              slider.style.left=-3600+'px';
+            }
+            /*
+            后退按钮的原理也是相似,当从第二张偏移到第一张时并不触发该条件,因为此时的当前偏移量刚好为-1200,而从第一张点击时触发该条件,等于前进到第七张的位置中,这时候同样无法看出差别,而这时候再进行动画的话,就可以轻易解决无缝轮播
+            */
+            animate(600);
+            
+            if(index==1){
+              index=5;
+            }else{
+              index-=1;
+            }
+            
+            showButton();
+            
+          }
+          function showButton(){
+            for(var i=0;i<buttons.length;i++){
+              if(buttons[i].className=='on'){
+                buttons[i].className='';
+                break;
+              }
+            }//遍历一次按钮,若是className为on的则将其解绑
+            buttons[index-1].className='on';
+            //给当前的按钮设置className on
+            //通过按钮点击事件改变的index由1开始计数,所以需要-1
+            //这里的index是全局变量
+          }
+          
+          for(var i=0;i<buttons.length;i++){//给每个按钮都绑定一个onclick事件
+             buttons[i].onclick=function(){
+                if (animated) {
+                  return;
+                }
+                if(this.classname=='on'){return}//防止再次动画和添加样式
+                    
+                var myIndex=parseInt(this.getAttribute('index'));//取得即将跳转的index
+              //this指向当前调用该事件的按钮,同时也可以获得其index值
+                var offset = -600 * (myIndex - index);
+                //位移量总是等于跳转的index-当前的index*-600
+                    
+                animate(offset);
+                index = myIndex;//通过全局变量保存当前index
+                showButton();
+                  }
+          }
+          //自动播放
+          function play() {
+                timer = setTimeout(function () {
+                    next.onclick();
+                    play();
+                }, 6000);
+          }
+          function stop() {
+                clearTimeout(timer);
+          }
+
+          //wrap.onmouseover = stop;
+          //wrap.onmouseout = play;
+
+          //play();
+    }
+    </script>
+  </head>
+  <body>
+    <h2 style="text-align:center">Slider-demo-simple-autoplay</h2>
+    <div id="wrap">
+      <div id="slider" style="left:-600px;">
+        <img src="img/5.gif"/>
+        <img src="img/1.gif"/>
+        <img src="img/2.gif"/>
+        <img src="img/3.gif"/>
+        <img src="img/4.gif"/>
+        <img src="img/5.gif"/>
+        <img src="img/1.gif"/>
+      </div>
+      <div id="buttons">
+        <span index='1' class="on">1</span>
+        <span index='2'>2</span>
+        <span index='3'>3</span>
+        <span index='4'>4</span>
+        <span index='5'>5</span>
+      </div>
+      <a href="javascript:;" id="next" class="arrow">&gt;</a>
+      <a href="javascript:;" id="prev" class="arrow">&lt;</a>
+    </div>
+
+  </body>
+</html>

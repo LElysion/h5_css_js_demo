@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello</title>
+    <style>
+    *{margin: 0;padding: 0}
+      .divsty{
+        width: 700px;
+        height: 700px;
+        background: skyblue;
+        margin: 20px auto;
+        color: white;
+        font-size: 135px;
+        line-height: 800px;
+        text-align: center;
+      }
+      ul{
+        list-style: none;
+      }
+      ul li a{
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+        width: 75px;
+        height: 25px;
+        line-height: 25px;
+        color: #6600ff;
+        text-decoration: none;
+        text-align: center;
+        border: 1px solid #6633FF;
+        padding: 20px;
+      }
+      ul li a:hover{
+        background: blue;
+        color: white
+      }
+      #buttons{
+        position: fixed;
+        left: 50%;
+        top: 150px;
+        margin-left: 350px;
+      }
+      .on{
+        background: blue;
+        color: white
+      }
+    </style>
+    <script type="text/javascript">
+      //定义getByClassName函数，让函数实现根据class name获取对象并返回
+    function getByClassName(obj, cls){
+        var elements = obj.getElementsByTagName("*");//先获取obj下的所有标签
+        var result = [];//创建一个数组来保存数据
+        for(var i = 0; i < elements.length; i++){
+            if(elements[i].className == cls){
+                result.push(elements[i]);//遍历obj中所有元素并将当中包含className为cls的放入数组中
+            }
+        }
+        return result;//返回数组
+    }
+    
+    function hasClass( obj, cls ){ 
+      return obj.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
+      //正则表达式的校验
+      //先有的className是否包含cls
+    }
+  
+    function removeClass( obj, cls ){ 
+      if( hasClass( obj, cls )){ //是否存在该样式
+        //remove
+      var reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
+      obj.className = obj.className.replace(reg, "");
+      //符合hasClass则使用""替换
+      }
+    }
+   
+    //定义getByClassName函数，让函数实现给对象增加class 
+    function addClass(obj, cls){
+        if(!hasClass(obj, cls)){
+            obj.className += " " + cls;
+        }
+    }
+    window.onload=function(){
+
+      window.onscroll=function(){
+        var top=document.documentElement.scrollTop||document.body.scrollTop;
+        var buttons=document.getElementById('buttons').getElementsByTagName('a');
+        var divwrap=getByClassName(document.getElementById("divwrap"),"divsty");
+        var currentId="";
+
+        for (var i=0;i<divwrap.length;i++){
+          var _divwrap=divwrap[i];
+          var _divwrapTop=_divwrap.offsetTop;
+
+          if(top>_divwrapTop-100){
+            currentId=_divwrap.id;
+            //alert(currentId);
+          }else{
+            break;
+          }
+        }
+
+        if(currentId){
+          for(var j=0;j<buttons.length;j++){
+            var _button=buttons[j];
+            var _href=_button.href.split('#');
+            if(_href[_href.length-1]!=currentId){
+              removeClass(_button,"on");
+            }else{
+              addClass(_button,"on");
+            }
+          }
+        }
+
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="buttons">
+      <ul>
+      <li><a href="#div1" class="on">button1</a></li>
+      <li><a href="#div2">button2</a></li>
+      <li><a href="#div3">button3</a></li>
+      <li><a href="#div4">button4</a></li>
+      <li><a href="#div5">button5</a></li>
+      <li><a href="#div6">button6</a></li>
+      </ul>
+    </div>
+    <div id="divwrap">
+      <div id="div1" class="divsty">div1</div>
+      <div id="div2" class="divsty">div2</div>
+      <div id="div3" class="divsty">div3</div>
+      <div id="div4" class="divsty">div4</div>
+      <div id="div5" class="divsty">div5</div>
+      <div id="div6" class="divsty">div6</div>
+    </div>
+  </body>
+</html>

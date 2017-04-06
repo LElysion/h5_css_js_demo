@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>原理</title>
+    <style>
+    *{margin: 0;padding: 0;}
+    #wrap{
+    	width: 600px;
+    	height: 400px;
+    	position: relative;
+    	overflow: hidden;
+    }
+    #content{
+    	width: 4200px;
+    	height: 400px;
+    	position: absolute;
+    }
+    #content img{
+    	float: left;
+        max-width: 600px;
+        min-width:600px;
+        height: 100%;
+    }
+    </style>
+    <script>
+    	
+    	function slider () {
+    		if(parseInt(content.style.left)<-2400)
+    			content.style.left=0+'px';
+    		content.style.left=parseInt(content.style.left)-600+'px';
+    		setTimeout("slider()",1000);
+    	}
+    	window.onload=function(){
+    		var content=document.getElementById('content');
+    		slider();
+    	}
+    </script>
+  </head>
+  <body>
+    <div id="wrap">
+    	<div id="content" style="left:-600px;">
+    		<img src="img/5.gif"/>
+        	<img src="img/1.gif"/>
+        	<img src="img/2.gif"/>
+        	<img src="img/3.gif"/>
+        	<img src="img/4.gif"/>
+        	<img src="img/5.gif"/>
+        	<img src="img/1.gif"/>
+    	</div>
+    </div>
+  </body>
+</html>
